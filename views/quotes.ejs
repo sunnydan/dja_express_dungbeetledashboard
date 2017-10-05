@@ -1,0 +1,7 @@
+<h1>Here are the awesome quotes!</h1>
+<br>
+<% for(var i = 0; i < quotes.length; i++) { %>
+<p>"<%=quotes[i].text %>"</p>
+<p> - <%=quotes[i].name %> - <%=moment(quotes[i].created_at).calendar() %></p>
+<hr>
+<% } %>
