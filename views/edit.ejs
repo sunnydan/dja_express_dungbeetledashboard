@@ -1,0 +1,27 @@
+<h1>New DungBeetle</h1>
+<% if(typeof(errors) != 'undefined' ) { %>
+    <% for (var x in errors) { %>
+     <h3><%= errors[x].message %></h3>
+    <% } %>
+<% } %>
+<table>
+    <form action="/dungbeetles/<%=dungbeetle._id %>" method="POST">
+        <tr>
+            <td>Name:</td>
+            <td>
+                <input type="text" name="name" id="name" value="<%=dungbeetle.name %>">
+            </td>
+        </tr>
+        <tr>
+            <td>DungBeetle Color:</td>
+            <td>
+                <input type="color" name="hexcolor" value="<%=dungbeetle.hexcolor %>">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Submit" step="float: right;">
+            </td>
+        </tr>
+    </form>
+</table>

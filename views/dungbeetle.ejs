@@ -1,0 +1,13 @@
+<a href="/">Back</a>
+<div style="color: <%=dungbeetle.hexcolor %>;">
+    <h1><%=dungbeetle.name %> the DungBeetle</h1>
+    <ul>
+        <li>Hexcolor: <%=dungbeetle.hexcolor %> </li>
+        <li>Birthday: <%=dungbeetle.birthday %> </li>
+        <li>Last Updated At: <%=dungbeetle.updated_at %> </li>
+        <li>Dung Ball Radius: <%=dungbeetle.dungsphereradius %> </li>
+        <li><a href="/dungbeetles/roll/<%=dungbeetle._id %>"><button>Roll Dung Ball</button></a></li>
+    </ul>
+    <a href="/dungbeetles/edit/<%=dungbeetle._id %>">Edit</a>
+    <a href="/dungbeetles/destroy/<%=dungbeetle._id %>">Delete</a>
+</div>

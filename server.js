@@ -20,14 +20,13 @@ const moment = require('moment');
 
 const DungBeetleSchema = new mongoose.Schema({
     name: { type: String, required: true, maxlength: 20 },
-    hexcolor: { type: String, required: true, maxlength: 6 },
+    hexcolor: { type: String, required: true, maxlength: 7 },
     birthday: { type: Date, default: moment() },
-    updated: { type: Date, default: moment() },
-    img: { type: String, data: Buffer },
+    updated_at: { type: Date, default: moment() },
     dungsphereradius: { type: Number, default: 1 },
 });
 mongoose.model('DungBeetle', DungBeetleSchema); // We are setting this Schema in our Models as 'User'
-const DungBeetle = mongoose.model('DungBeetle') // We are retrieving this Schema from our Models, named 'User'   
+const DungBeetle = mongoose.model('DungBeetle') // We are retrieving this Schema from our Models, named 'User' 
 
 app.get('/', function (req, res) {
     DungBeetle.find({}, function (err, dungbeetles) {
@@ -41,27 +40,6 @@ app.get('/', function (req, res) {
     });
 });
 
-app.get('/dungbeetles/:id', function (req, res) {
-    DungBeetle.findOne({id: req.params.id}, function (err, dungbeetle) {
-        if (err) {
-            console.log(err);
-        }
-        context = {};
-        context['dungbeetle'] = dungbeetle;
-        context['moment'] = moment;
-        res.render('index', context);
-    });
-});
-
-app.get('/dungbeetles/new', function (req, res) {
-    context = {};
-    if(req.session.errors) {
-        context['errors'] = req.session.errors;
-        req.session.errors = undefined;
-    }
-    res.render('new');
-});
-
 app.post('/dungbeetles', function (req, res) {
     console.log("POST DATA", req.body);
     let dungbeetle = new DungBeetle(req.body);
@@ -72,18 +50,39 @@ app.post('/dungbeetles', function (req, res) {
             res.redirect('/dungbeetles/new');
         }
         else {
-            res.redirect('/quotes');
+            res.redirect('/dungbeetles/' + dungbeetle._id);
         }
     });
 })
 
-app.get('/dungbeetles/edit/:id', function (req, res) {
-    DungBeetle.findOne({id: req.params.id}, function (err, dungbeetle) {
+app.get('/dungbeetles/new', function (req, res) {
+    context = {};
+    if (req.session.errors) {
+        context['errors'] = req.session.errors;
+        req.session.errors = undefined;
+    }
+    res.render('new');
+});
+
+app.get('/dungbeetles/:id', function (req, res) {
+    DungBeetle.findOne({ _id: req.params.id }, function (err, dungbeetle) {
         if (err) {
             console.log(err);
         }
         context = {};
-        if(req.session.errors) {
+        context['dungbeetle'] = dungbeetle;
+        context['moment'] = moment;
+        res.render('dungbeetle', context);
+    });
+});
+
+app.get('/dungbeetles/edit/:id', function (req, res) {
+    DungBeetle.findOne({ _id: req.params.id }, function (err, dungbeetle) {
+        if (err) {
+            console.log(err);
+        }
+        context = {};
+        if (req.session.errors) {
             context['errors'] = req.session.errors;
             req.session.errors = undefined;
         }
@@ -94,12 +93,49 @@ app.get('/dungbeetles/edit/:id', function (req, res) {
 });
 
 app.post('/dungbeetles/:id', function (req, res) {
-    //update dungbeetle at ID with post data
-})
+    DungBeetle.findOne({ _id: req.params.id }, function (err, dungbeetle) {
+        if (err) {
+            console.log(err);
+        }
+        dungbeetle.name = req.body['name'];
+        dungbeetle.hexcolor = req.body['hexcolor'];
+        dungbeetle.updated_at = moment();
+        dungbeetle.save(function (err) {
+            if (err) {
+                req.session.errors = dungbeetle.errors;
+                res.redirect('/dungbeetles/edit/' + req.params.id);
+            }
+            else {
+                res.redirect('/dungbeetles/' + dungbeetle._id);
+            }
+        });
+    });
+});
 
-app.post('/dungbeetles/destroy/:id', function (req, res) {
-    //remove dungbeetle at ID from database
-})
+app.get('/dungbeetles/roll/:id', function (req, res) {
+    DungBeetle.findOne({ _id: req.params.id }, function (err, dungbeetle) {
+        if (err) {
+            console.log(err);
+        }
+        dungbeetle.dungsphereradius = dungbeetle.dungsphereradius * 2;
+        dungbeetle.updated_at = moment();
+        dungbeetle.save(function (err) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                res.redirect('/dungbeetles/' + dungbeetle._id);
+            }
+        });
+    });
+});
+
+app.get('/dungbeetles/destroy/:id', function (req, res) {
+    DungBeetle.remove({ _id: req.params.id }, function (err) {
+        console.log(err);
+    });
+    res.redirect('/');
+});
 
 // Setting our Server to Listen on Port: 8000
 app.listen(8000, function () {

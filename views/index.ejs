@@ -1,18 +1,31 @@
-<h1>Welcome to Quoting Dojo</h1>
-<% if(typeof(errors) != 'undefined' ) { %>
-    <% for (var x in errors) { %>
-     <h3><%= errors[x].message %></h3>
-    <% } %>
-<% } %>
-<form action="/process" method="POST">
-Your Name:
-<br>
-<input type="text" name="name" id="name">
-<br>
-Your Quote:
-<br>
-<textarea name="text" id="text" cols="30"></textarea>
-<br>
-<input type="submit" value="Add my quote!">
-</form>
-<a href="/quotes"><button>Skip to quotes</button></a>
+<h1>DungBeetle Dashboard</h1>
+<a href="/dungbeetles/new"><button>New DungBeetle</button></a>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Hexcolor</th>
+        <th>Birthday</th>
+        <th>Last Updated</th>
+        <th>Dung Ball Radius</th>
+    </tr>
+    <% for(var i = 0; i < dungbeetles.length; i++) { %>
+        <tr style="color: <%=dungbeetles[i].hexcolor %>;">
+            <td>
+                <a href="/dungbeetles/<%=dungbeetles[i]._id %>"><%=dungbeetles[i].name %></a>
+                
+            </td>
+            <td>
+                <%=dungbeetles[i].hexcolor %>
+            </td>
+            <td>
+                <%=moment(dungbeetles[i].birthday).calendar() %>
+            </td>
+            <td>
+                <%=moment(dungbeetles[i].updated_at).calendar() %>
+            </td>
+            <td>
+                <%=dungbeetles[i].dungsphereradius %>
+            </td>
+        </tr>
+        <% } %>
+</table>
