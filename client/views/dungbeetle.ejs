@@ -3,8 +3,8 @@
     <h1><%=dungbeetle.name %> the DungBeetle</h1>
     <ul>
         <li>Hexcolor: <%=dungbeetle.hexcolor %> </li>
-        <li>Birthday: <%=dungbeetle.birthday %> </li>
-        <li>Last Updated At: <%=dungbeetle.updated_at %> </li>
+        <li>Birthday: <%=moment(dungbeetle.birthday).calendar() %> </li>
+        <li>Last Updated At: <%=moment(dungbeetle.updated_at).calendar() %> </li>
         <li>Dung Ball Radius: <%=dungbeetle.dungsphereradius %> </li>
         <li><a href="/dungbeetles/roll/<%=dungbeetle._id %>"><button>Roll Dung Ball</button></a></li>
     </ul>
